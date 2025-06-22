@@ -1,8 +1,9 @@
-package repository
+package repository_test
 
 import (
-	"context"
 	"testing"
+
+	"github.com/arielsrv/fxf/internal/features/messages/repository"
 
 	"github.com/arielsrv/fxf/internal/features/messages/models"
 	"github.com/google/uuid"
@@ -11,8 +12,8 @@ import (
 )
 
 func TestInMemoryMessageRepository(t *testing.T) {
-	ctx := context.Background()
-	repo := NewInMemoryMessageRepository()
+	ctx := t.Context()
+	repo := repository.NewInMemoryMessageRepository()
 
 	t.Run("should create and get a message successfully", func(t *testing.T) {
 		// Arrange

@@ -14,7 +14,7 @@ var Module = fx.WithLogger(func() fxevent.Logger {
 	return New(logger)
 })
 
-// SlogLogger adapta slog a fxevent.Logger
+// SlogLogger adapta slog a fxevent.Logger.
 type SlogLogger struct {
 	logger *slog.Logger
 }

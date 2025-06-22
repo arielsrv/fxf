@@ -4,6 +4,8 @@ import (
 	"context"
 	"log/slog"
 
+	"github.com/ansrivas/fiberprometheus/v2"
+	"github.com/gofiber/contrib/otelfiber"
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/fx"
 )
@@ -38,5 +40,12 @@ func NewFiberServer() *fiber.App {
 		EnablePrintRoutes:     true,
 		DisableStartupMessage: true,
 	})
+
+	app.Use(otelfiber.Middleware())
+
+	prometheus := fiberprometheus.NewWithDefaultRegistry("fxf")
+	prometheus.RegisterAt(app, "/metrics")
+	app.Use(prometheus.Middleware)
+
 	return app
 }

@@ -2,6 +2,7 @@ package queries
 
 import (
 	"context"
+
 	"github.com/arielsrv/fxf/internal/features/messages/dtos"
 	"github.com/arielsrv/fxf/internal/features/messages/repository"
 	"github.com/arielsrv/fxf/internal/interfaces"

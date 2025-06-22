@@ -4,10 +4,10 @@ import (
 	"context"
 	"log"
 
+	"github.com/arielsrv/fxf/internal/features/messages/dtos"
 	"github.com/arielsrv/fxf/internal/features/messages/models"
 	"github.com/arielsrv/fxf/internal/features/messages/repository"
-
-	"github.com/google/uuid"
+	"github.com/arielsrv/fxf/internal/interfaces"
 	"github.com/mehdihadeli/go-mediatr"
 	"go.uber.org/fx"
 )
@@ -18,31 +18,23 @@ var Module = fx.Options(
 	fx.Invoke(registerCreateMessageCommandHandler),
 )
 
-// CreateMessageCommand is the command for creating a new message.
-type CreateMessageCommand struct {
-	Text string `json:"text"`
-}
-
-// CreateMessageCommandResponse is the response for CreateMessageCommand.
-type CreateMessageCommandResponse struct {
-	ID uuid.UUID `json:"id"`
-}
-
 // CreateMessageCommandHandler is the handler for CreateMessageCommand.
 type CreateMessageCommandHandler struct {
 	repo repository.IMessageRepository
 }
 
 // NewCreateMessageCommandHandler creates a new CreateMessageCommandHandler.
-func NewCreateMessageCommandHandler(repo repository.IMessageRepository) *CreateMessageCommandHandler {
+func NewCreateMessageCommandHandler(repo repository.IMessageRepository) interfaces.ICreateMessageCommandHandler {
 	return &CreateMessageCommandHandler{repo: repo}
 }
 
 // Handle handles the CreateMessageCommand.
 func (h *CreateMessageCommandHandler) Handle(
 	ctx context.Context,
-	cmd *CreateMessageCommand,
-) (*CreateMessageCommandResponse, error) {
+	cmd *dtos.CreateMessageCommand,
+) (*dtos.CreateMessageCommandResponse, error) {
+	log.Printf("Handling CreateMessageCommand for text: %s", cmd.Text)
+
 	message := &models.Message{
 		Text: cmd.Text,
 	}
@@ -52,11 +44,11 @@ func (h *CreateMessageCommandHandler) Handle(
 		return nil, err
 	}
 
-	return &CreateMessageCommandResponse{ID: createdMessage.ID}, nil
+	return &dtos.CreateMessageCommandResponse{ID: createdMessage.ID}, nil
 }
 
 // registerCreateMessageCommandHandler registers the command handler with MediatR.
-func registerCreateMessageCommandHandler(handler *CreateMessageCommandHandler) error {
+func registerCreateMessageCommandHandler(handler interfaces.ICreateMessageCommandHandler) error {
 	log.Println("Registering CreateMessageCommandHandler")
-	return mediatr.RegisterRequestHandler[*CreateMessageCommand, *CreateMessageCommandResponse](handler)
+	return mediatr.RegisterRequestHandler[*dtos.CreateMessageCommand, *dtos.CreateMessageCommandResponse](handler)
 }

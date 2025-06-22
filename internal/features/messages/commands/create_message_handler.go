@@ -2,7 +2,6 @@ package commands
 
 import (
 	"context"
-	"log"
 
 	"github.com/arielsrv/fxf/internal/features/messages/dtos"
 	"github.com/arielsrv/fxf/internal/features/messages/models"
@@ -33,8 +32,6 @@ func (h *CreateMessageCommandHandler) Handle(
 	ctx context.Context,
 	cmd *dtos.CreateMessageCommand,
 ) (*dtos.CreateMessageCommandResponse, error) {
-	log.Printf("Handling CreateMessageCommand for text: %s", cmd.Text)
-
 	message := &models.Message{
 		Text: cmd.Text,
 	}
@@ -49,6 +46,5 @@ func (h *CreateMessageCommandHandler) Handle(
 
 // registerCreateMessageCommandHandler registers the command handler with MediatR.
 func registerCreateMessageCommandHandler(handler interfaces.ICreateMessageCommandHandler) error {
-	log.Println("Registering CreateMessageCommandHandler")
 	return mediatr.RegisterRequestHandler[*dtos.CreateMessageCommand, *dtos.CreateMessageCommandResponse](handler)
 }

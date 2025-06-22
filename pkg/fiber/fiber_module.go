@@ -2,7 +2,6 @@ package fiber
 
 import (
 	"context"
-	"log"
 	"log/slog"
 
 	"github.com/gofiber/fiber/v2"
@@ -15,19 +14,19 @@ var Module = fx.Options(
 	fx.Invoke(func(lc fx.Lifecycle, app *fiber.App) {
 		lc.Append(fx.Hook{
 			OnStart: func(ctx context.Context) error {
-				slog.Info("Starting Fiber server on :3000")
+				slog.InfoContext(ctx, "Starting Fiber server on :3000")
 				// The server is started in a goroutine so that it doesn't
 				// block the application from starting.
 				go func() {
 					if err := app.Listen(":3000"); err != nil {
-						panic(err)
+						slog.ErrorContext(ctx, err.Error())
 					}
 				}()
 				return nil
 			},
 			OnStop: func(ctx context.Context) error {
-				log.Println("Stopping Fiber server")
-				return app.Shutdown()
+				slog.InfoContext(ctx, "Stopping Fiber server")
+				return app.ShutdownWithContext(ctx)
 			},
 		})
 	}),

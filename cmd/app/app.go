@@ -7,6 +7,7 @@ import (
 	"github.com/arielsrv/fxf/internal/features/messages/repository"
 	"github.com/arielsrv/fxf/internal/features/messages/service"
 	"github.com/arielsrv/fxf/pkg/fiber"
+	"github.com/arielsrv/fxf/pkg/logger"
 	"github.com/arielsrv/fxf/pkg/mediator"
 
 	"go.uber.org/fx"
@@ -17,6 +18,7 @@ func main() {
 		// Pkg Modules
 		fiber.Module,
 		mediator.Module,
+		logger.Module,
 
 		// Feature Modules
 		repository.Module,

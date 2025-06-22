@@ -2,8 +2,6 @@ package queries
 
 import (
 	"context"
-	"log"
-
 	"github.com/arielsrv/fxf/internal/features/messages/dtos"
 	"github.com/arielsrv/fxf/internal/features/messages/repository"
 	"github.com/arielsrv/fxf/internal/interfaces"
@@ -32,8 +30,6 @@ func (h *GetMessageByIDQueryHandler) Handle(
 	ctx context.Context,
 	query *dtos.GetMessageByIDQuery,
 ) (*dtos.GetMessageByIDQueryResponse, error) {
-	log.Printf("Handling GetMessageByIDQuery for ID: %s", query.ID)
-
 	message, err := h.repo.GetMessageByID(ctx, query.ID)
 	if err != nil {
 		return nil, err
@@ -47,6 +43,5 @@ func (h *GetMessageByIDQueryHandler) Handle(
 
 // registerGetMessageByIDQueryHandler registers the query handler with MediatR.
 func registerGetMessageByIDQueryHandler(handler interfaces.IGetMessageByIDQueryHandler) error {
-	log.Println("Registering GetMessageByIDQueryHandler")
 	return mediatr.RegisterRequestHandler[*dtos.GetMessageByIDQuery, *dtos.GetMessageByIDQueryResponse](handler)
 }

@@ -5,7 +5,7 @@ go 1.24.4
 require (
 	github.com/ansrivas/fiberprometheus/v2 v2.14.0
 	github.com/gofiber/contrib/otelfiber v1.0.10
-	github.com/gofiber/fiber/v2 v2.52.9
+	github.com/gofiber/fiber/v2 v2.52.10
 	github.com/google/uuid v1.6.0
 	github.com/mehdihadeli/go-mediatr v1.4.0
 	github.com/stretchr/testify v1.11.1

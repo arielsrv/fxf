@@ -11,16 +11,22 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// Mock implementations for testing
+// Mock implementations for testing.
 type MockCreateMessageCommandHandler struct{}
 
-func (m *MockCreateMessageCommandHandler) Handle(ctx context.Context, cmd *dtos.CreateMessageCommand) (*dtos.CreateMessageCommandResponse, error) {
+func (m *MockCreateMessageCommandHandler) Handle(
+	ctx context.Context,
+	cmd *dtos.CreateMessageCommand,
+) (*dtos.CreateMessageCommandResponse, error) {
 	return &dtos.CreateMessageCommandResponse{ID: uuid.New()}, nil
 }
 
 type MockGetMessageByIDQueryHandler struct{}
 
-func (m *MockGetMessageByIDQueryHandler) Handle(ctx context.Context, query *dtos.GetMessageByIDQuery) (*dtos.GetMessageByIDQueryResponse, error) {
+func (m *MockGetMessageByIDQueryHandler) Handle(
+	ctx context.Context,
+	query *dtos.GetMessageByIDQuery,
+) (*dtos.GetMessageByIDQueryResponse, error) {
 	return &dtos.GetMessageByIDQueryResponse{ID: query.ID, Text: "test"}, nil
 }
 

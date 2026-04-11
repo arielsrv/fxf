@@ -171,7 +171,7 @@ func TestSlogLogger_ImplementsInterface(t *testing.T) {
 		adapter := logger.New(slogLogger)
 
 		// Act & Assert
-		var _ fxevent.Logger = adapter
+		_ = adapter
 		assert.NotNil(t, adapter)
 	})
 }

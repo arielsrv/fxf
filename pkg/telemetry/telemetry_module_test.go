@@ -24,7 +24,6 @@ func TestRegisterTracer(t *testing.T) {
 		// Start the app to test tracer registration
 		ctx := context.Background()
 		err := app.Start(ctx)
-
 		// The tracer registration should work without errors
 		// OTLP connection might fail in some environments, but that's expected
 		if err != nil {

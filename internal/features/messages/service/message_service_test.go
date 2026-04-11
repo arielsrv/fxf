@@ -12,12 +12,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// Mock service for testing
+// Mock service for testing.
 type MockMessageService struct {
 	mock.Mock
 }
 
-func (m *MockMessageService) CreateMessage(ctx context.Context, cmd *dtos.CreateMessageCommand) (*dtos.CreateMessageCommandResponse, error) {
+func (m *MockMessageService) CreateMessage(
+	ctx context.Context,
+	cmd *dtos.CreateMessageCommand,
+) (*dtos.CreateMessageCommandResponse, error) {
 	args := m.Called(ctx, cmd)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
@@ -25,7 +28,10 @@ func (m *MockMessageService) CreateMessage(ctx context.Context, cmd *dtos.Create
 	return args.Get(0).(*dtos.CreateMessageCommandResponse), args.Error(1)
 }
 
-func (m *MockMessageService) GetMessageByID(ctx context.Context, query *dtos.GetMessageByIDQuery) (*dtos.GetMessageByIDQueryResponse, error) {
+func (m *MockMessageService) GetMessageByID(
+	ctx context.Context,
+	query *dtos.GetMessageByIDQuery,
+) (*dtos.GetMessageByIDQueryResponse, error) {
 	args := m.Called(ctx, query)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)

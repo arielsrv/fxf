@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	http2 "net/http"
 	"net/http/httptest"
 	"testing"
 
@@ -17,12 +18,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// Mock service for testing
+// Mock service for testing.
 type MockMessageService struct {
 	mock.Mock
 }
 
-func (m *MockMessageService) CreateMessage(ctx context.Context, cmd *dtos.CreateMessageCommand) (*dtos.CreateMessageCommandResponse, error) {
+func (m *MockMessageService) CreateMessage(
+	ctx context.Context,
+	cmd *dtos.CreateMessageCommand,
+) (*dtos.CreateMessageCommandResponse, error) {
 	args := m.Called(ctx, cmd)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
@@ -30,7 +34,10 @@ func (m *MockMessageService) CreateMessage(ctx context.Context, cmd *dtos.Create
 	return args.Get(0).(*dtos.CreateMessageCommandResponse), args.Error(1)
 }
 
-func (m *MockMessageService) GetMessageByID(ctx context.Context, query *dtos.GetMessageByIDQuery) (*dtos.GetMessageByIDQueryResponse, error) {
+func (m *MockMessageService) GetMessageByID(
+	ctx context.Context,
+	query *dtos.GetMessageByIDQuery,
+) (*dtos.GetMessageByIDQueryResponse, error) {
 	args := m.Called(ctx, query)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
@@ -54,12 +61,13 @@ func TestMessageHandlers_CreateMessage(t *testing.T) {
 		}
 
 		// Use mock.AnythingOfType for context since Fiber passes its own context type
-		mockService.On("CreateMessage", mock.AnythingOfType("*fasthttp.RequestCtx"), createMessageCmd).Return(expectedResponse, nil)
+		mockService.On("CreateMessage", mock.AnythingOfType("*fasthttp.RequestCtx"), createMessageCmd).
+			Return(expectedResponse, nil)
 
 		http.RegisterRoutes(app, handlers)
 
 		body, _ := json.Marshal(createMessageCmd)
-		req := httptest.NewRequest("POST", "/messages", bytes.NewReader(body))
+		req := httptest.NewRequest(http2.MethodPost, "/messages", bytes.NewReader(body))
 		req.Header.Set("Content-Type", "application/json")
 
 		// Act
@@ -85,7 +93,7 @@ func TestMessageHandlers_CreateMessage(t *testing.T) {
 
 		http.RegisterRoutes(app, handlers)
 
-		req := httptest.NewRequest("POST", "/messages", bytes.NewReader([]byte("invalid json")))
+		req := httptest.NewRequest(http2.MethodPost, "/messages", bytes.NewReader([]byte("invalid json")))
 		req.Header.Set("Content-Type", "application/json")
 
 		// Act
@@ -112,12 +120,13 @@ func TestMessageHandlers_CreateMessage(t *testing.T) {
 		}
 
 		expectedError := errors.New("service error")
-		mockService.On("CreateMessage", mock.AnythingOfType("*fasthttp.RequestCtx"), createMessageCmd).Return(nil, expectedError)
+		mockService.On("CreateMessage", mock.AnythingOfType("*fasthttp.RequestCtx"), createMessageCmd).
+			Return(nil, expectedError)
 
 		http.RegisterRoutes(app, handlers)
 
 		body, _ := json.Marshal(createMessageCmd)
-		req := httptest.NewRequest("POST", "/messages", bytes.NewReader(body))
+		req := httptest.NewRequest(http2.MethodPost, "/messages", bytes.NewReader(body))
 		req.Header.Set("Content-Type", "application/json")
 
 		// Act
@@ -153,11 +162,12 @@ func TestMessageHandlers_GetMessageByID(t *testing.T) {
 			Text: "test message",
 		}
 
-		mockService.On("GetMessageByID", mock.AnythingOfType("*fasthttp.RequestCtx"), query).Return(expectedResponse, nil)
+		mockService.On("GetMessageByID", mock.AnythingOfType("*fasthttp.RequestCtx"), query).
+			Return(expectedResponse, nil)
 
 		http.RegisterRoutes(app, handlers)
 
-		req := httptest.NewRequest("GET", "/messages/"+messageID.String(), nil)
+		req := httptest.NewRequest(http2.MethodGet, "/messages/"+messageID.String(), nil)
 
 		// Act
 		resp, err := app.Test(req)
@@ -183,7 +193,7 @@ func TestMessageHandlers_GetMessageByID(t *testing.T) {
 
 		http.RegisterRoutes(app, handlers)
 
-		req := httptest.NewRequest("GET", "/messages/invalid-uuid", nil)
+		req := httptest.NewRequest(http2.MethodGet, "/messages/invalid-uuid", nil)
 
 		// Act
 		resp, err := app.Test(req)
@@ -214,7 +224,7 @@ func TestMessageHandlers_GetMessageByID(t *testing.T) {
 
 		http.RegisterRoutes(app, handlers)
 
-		req := httptest.NewRequest("GET", "/messages/"+messageID.String(), nil)
+		req := httptest.NewRequest(http2.MethodGet, "/messages/"+messageID.String(), nil)
 
 		// Act
 		resp, err := app.Test(req)

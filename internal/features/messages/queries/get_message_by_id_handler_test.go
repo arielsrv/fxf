@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// Mock repository for testing
+// Mock repository for testing.
 type MockMessageRepository struct {
 	mock.Mock
 }

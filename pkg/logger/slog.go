@@ -31,7 +31,15 @@ func (l *SlogLogger) LogEvent(e fxevent.Event) {
 		if evt.Err != nil {
 			l.logger.Error("OnStart hook failed", "callee", evt.FunctionName, "caller", evt.CallerName, "err", evt.Err)
 		} else {
-			l.logger.Info("OnStart hook executed", "callee", evt.FunctionName, "caller", evt.CallerName, "runtime", evt.Runtime)
+			l.logger.Info(
+				"OnStart hook executed",
+				"callee",
+				evt.FunctionName,
+				"caller",
+				evt.CallerName,
+				"runtime",
+				evt.Runtime,
+			)
 		}
 	case *fxevent.OnStopExecuting:
 		l.logger.Info("OnStop hook executing", "callee", evt.FunctionName, "caller", evt.CallerName)
@@ -39,7 +47,15 @@ func (l *SlogLogger) LogEvent(e fxevent.Event) {
 		if evt.Err != nil {
 			l.logger.Error("OnStop hook failed", "callee", evt.FunctionName, "caller", evt.CallerName, "err", evt.Err)
 		} else {
-			l.logger.Info("OnStop hook executed", "callee", evt.FunctionName, "caller", evt.CallerName, "runtime", evt.Runtime)
+			l.logger.Info(
+				"OnStop hook executed",
+				"callee",
+				evt.FunctionName,
+				"caller",
+				evt.CallerName,
+				"runtime",
+				evt.Runtime,
+			)
 		}
 	case *fxevent.Supplied:
 		if evt.Err != nil {

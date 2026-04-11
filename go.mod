@@ -1,6 +1,6 @@
 module github.com/arielsrv/fxf
 
-go 1.24.4
+go 1.26.2
 
 require (
 	github.com/ansrivas/fiberprometheus/v2 v2.15.0
